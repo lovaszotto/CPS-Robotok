@@ -2,3 +2,5 @@
 .vscode
 *.htlm
 *.png
+output.xml
+*.log
