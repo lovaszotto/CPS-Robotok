@@ -6,9 +6,9 @@ ${URL}    https://172.28.30.5/cps30/
 
 *** Keywords ***
 Bejelentkezés admin felhasználóval
-    ${options}=    Evaluate    sys.modules['selenium.webdriver'].EdgeOptions()    sys, selenium.webdriver
+    ${options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys, selenium.webdriver
     Call Method    ${options}    add_argument    --ignore-certificate-errors
-    Open Browser    ${URL}    edge    options=${options}    executable_path=C:/Windows/System32/msedgedriver.exe
+    Open Browser    ${URL}    chrome    options=${options}
     Maximize Browser Window
     Sleep    5s
     Wait Until Element Is Visible    id=username    60s
