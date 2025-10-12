@@ -26,25 +26,9 @@ if not exist "results" (
 ) 
  
 echo Robot Framework teszt futtatasa... 
-echo Valasszon futtatasi modot: 
-echo 1. Formai ellenorzes (PLG-00-main.robot) 
-echo 2. Excel kitolto (PLG-02-Excel-kitolto.robot) 
-echo 3. Test Cases (PLG-04-FormaiEllenorzes-TestCases.robot) 
-echo 4. DOCX Reader teszt (test_docxReader.robot) 
-set /p MODE="Valasztas (1-4): " 
+echo CPS30 adatok ellenorzes futtatasa...
  
-if "%MODE%"=="1" ( 
-    rf_env\Scripts\robot.exe --outputdir results PLG-00-main.robot 
-) else if "%MODE%"=="2" ( 
-    rf_env\Scripts\robot.exe --outputdir results PLG-02-Excel-kitolto.robot 
-) else if "%MODE%"=="3" ( 
-    rf_env\Scripts\robot.exe --outputdir results PLG-04-FormaiEllenorzes-TestCases.robot 
-) else if "%MODE%"=="4" ( 
-    rf_env\Scripts\robot.exe --outputdir results test_docxReader.robot 
-) else ( 
-    echo Ervenytelen valasztas, alapertelmezett: formai ellenorzes 
-    rf_env\Scripts\robot.exe --outputdir results PLG-00-main.robot 
-) 
+rf_env\Scripts\robot.exe --outputdir results tests\cps30_adatok_ellenorzes.robot 
  
 if errorlevel 1 ( 
     echo HIBA: A teszt futtatasa sikertelen 

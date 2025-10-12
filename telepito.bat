@@ -19,20 +19,10 @@ echo   - SeleniumLibrary webes automatizalas
 echo =====================================================
 echo.
 
-REM Telepitesi konyvtar bekeres
-echo Adja meg a telepitesi konyvtar eleresi utjat:
-echo (pl: C:\DuplikacioEllenorzo vagy D:\MyProjects\DuplikacioSystem)
-echo. 
 REM Automatikus telepitesi konyvtar beallitasa: az aktualis folder nevében a DownloadedRobots kifejezést InstalledRobots-ra cseréljük
 set "CURDIR=%CD%"
 set "TARGET_DIR=%CURDIR:DownloadedRobots=InstalledRobots%"
-echo [INFO] Alapertelmezett telepitesi konyvtar: %TARGET_DIR%
-set /p USER_TARGET="Telepitesi konyvtar (ENTER = alapertelmezett): "
-if not "%USER_TARGET%"=="" (
-    set "TARGET_DIR=%USER_TARGET%"
-) else (
-    echo [INFO] Alapertelmezett konyvtar hasznalata: %TARGET_DIR%
-)
+echo [INFO] Telepitesi konyvtar: %TARGET_DIR%
 
 REM Ha nem letezik a konyvtar, hozzuk letre
 if not exist "%TARGET_DIR%" (
@@ -232,14 +222,7 @@ echo     echo FIGYELEM: ChromeDriver nincs a PATH-ban! >> start.bat
 echo     echo SeleniumLibrary megprobalja automatikusan kezelni a webdriver-t. >> start.bat
 echo ^) >> start.bat
 echo. >> start.bat
-echo echo Konfiguracio ellenorzese... >> start.bat
-echo if not exist "Duplikacio.config" ^( >> start.bat
-echo     echo HIBA: Duplikacio.config fajl nem talalhato! >> start.bat
-echo     echo Ellenorizze a konfiguracios fajlt! >> start.bat
-echo     pause >> start.bat
-echo     exit /b 1 >> start.bat
-echo ^) >> start.bat
-echo. >> start.bat
+
 echo REM Results konyvtar letrehozasa ha nem letezik >> start.bat
 echo if not exist "results" ^( >> start.bat
 echo     echo Results konyvtar letrehozasa... >> start.bat
@@ -247,27 +230,9 @@ echo     mkdir "results" >> start.bat
 echo ^) >> start.bat
 echo. >> start.bat
 echo echo Robot Framework teszt futtatasa... >> start.bat
-echo echo Valasszon futtatasi modot: >> start.bat
-echo echo 1. CPS30 bejelentkezes teszt ^(cps30_access.robot^) >> start.bat
-echo echo 2. CPS30 eljaras teszt ^(cps30_eljaras.robot^) >> start.bat
-echo echo 3. Beszerzesi azonosito ellenorzes ^(beszerzesi_azonosito_ellenorzes.robot^) >> start.bat
-echo echo 4. CPS30 adatok ellenorzes ^(cps30_adatok_ellenorzes.robot^) >> start.bat
-echo echo 5. Osszes teszt futtatasa ^(tests konyvtar^) >> start.bat
-echo set /p MODE="Valasztas (1-5): " >> start.bat
+echo echo CPS30 adatok ellenorzes futtatasa... >> start.bat
 echo. >> start.bat
-echo if "%%MODE%%"=="1" ^( >> start.bat
-echo     rf_env\Scripts\robot.exe --outputdir results tests\cps30_access.robot >> start.bat
-echo ^) else if "%%MODE%%"=="2" ^( >> start.bat
-echo     rf_env\Scripts\robot.exe --outputdir results tests\cps30_eljaras.robot >> start.bat
-echo ^) else if "%%MODE%%"=="3" ^( >> start.bat
-echo     rf_env\Scripts\robot.exe --outputdir results tests\beszerzesi_azonosito_ellenorzes.robot >> start.bat
-echo ^) else if "%%MODE%%"=="4" ^( >> start.bat
-echo     rf_env\Scripts\robot.exe --outputdir results tests\cps30_adatok_ellenorzes.robot >> start.bat
-echo ^) else if "%%MODE%%"=="5" ^( >> start.bat
-echo     rf_env\Scripts\robot.exe --outputdir results tests >> start.bat
-echo ^) else ^( >> start.bat
-echo     echo Ervenytelen valasztas, alapertelmezett: CPS30 adatok ellenorzes >> start.bat
-echo     rf_env\Scripts\robot.exe --outputdir results tests\cps30_adatok_ellenorzes.robot >> start.bat
+echo rf_env\Scripts\robot.exe --outputdir results tests\cps30_adatok_ellenorzes.robot >> start.bat
 echo ^) >> start.bat
 echo. >> start.bat
 echo if errorlevel 1 ^( >> start.bat
@@ -285,7 +250,7 @@ echo     echo - Screenshots: results\screenshots >> start.bat
 echo     echo ========================================= >> start.bat
 echo ^) >> start.bat
 echo. >> start.bat
-echo pause >> start.bat
+
 
 echo.
 echo =========================================
@@ -319,23 +284,4 @@ echo Eredmenyek: results\ konyvtar
 echo Dokumentacio: README.md
 echo =========================================
 echo.
-echo.
-echo Szeretne most tesztelni a telepitett rendszert?
-echo 1. Igen, futtas teszt (i)
-echo 2. Nem, kesobb (n)
-set /p TEST_NOW="Valasztas (i/n): "
 
-if /i "%TEST_NOW%"=="i" (
-    echo.
-    echo CPS30 teszt futtatasa...
-    cd /d "%TARGET_DIR%"
-    call start.bat
-) else (
-    echo.
-    echo A rendszer keszen all a hasznalatra!
-    echo.
-    echo Inditas: %TARGET_DIR%\start.bat
-    echo Eredmenyek: %TARGET_DIR%\results\
-)
-echo.
-pause
