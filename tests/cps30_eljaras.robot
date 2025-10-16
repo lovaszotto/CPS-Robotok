@@ -1,6 +1,7 @@
 *** Settings ***
 Library    SeleniumLibrary
 Library    String
+Library    Collections
 Resource    ../resources/cps30_login.resource
 Resource    ../resources/table_keywords.resource
 
@@ -202,7 +203,7 @@ CPS30 ELJÁRÁS oldal megnyitása
 ##### Feladatok táblázat validálása
 # 1) Kattintás a "Részterületek" melletti három pontra
     Click Element    xpath=//a[contains(text(),"Részterületek")]/following::a[@class="tab_menu_dropdown_link"][1]
-    Sleep    2s
+    Sleep    1s
     
 # 2) Kattintás a legördülő menüben a "Feladatok" elemre (id alapján)
     Click Element    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_Tasks_Tab"]
@@ -217,8 +218,8 @@ CPS30 ELJÁRÁS oldal megnyitása
 
     ${text}=    Get Text    xpath=//table[@class="OPM_GeneralTable_Table"]//tr[td[text()="Vállalat"]]/td[@class="OPM_GeneralTable_ValueColumn"]
     Érték szöveg és nem üres    ${text}
+    Sleep    2s
 
-    Sleep    5s
 # Leírás mező validálása
     ${text}=    Get Value    xpath=//span[text()="Leírás"]/ancestor::div[contains(@class,"col-sm-3")]/following-sibling::div[contains(@class,"col-sm-9")]//textarea[contains(@id,"TextBox_DescriptionMultilang_multi")]
     Should Not Be Empty    ${text}    Az érték üres!
@@ -243,7 +244,7 @@ CPS30 ELJÁRÁS oldal megnyitása
 
 ##### Eljárás eredménye ablak
 #Eljárás eredménye gomb megnyomása
-    Wait Until Element Is Visible    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/SourcingEventResult"]    5s
+    Wait Until Element Is Visible    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/SourcingEventResult"]    4s
     Click Element    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/SourcingEventResult"]
     Sleep    1s
 
@@ -254,7 +255,6 @@ CPS30 ELJÁRÁS oldal megnyitása
 ##### Ajánlatok tab alatt lévő ag-Grid táblázat fejlécének pontos kigyűjtése (header row div alapján)
 # Várjuk, hogy a felugró ablak megjelenjen
     Wait Until Element Is Visible    xpath=//*[@id="screen_1"]/div[2]/div
-    Sleep    2s
 
     ${header_cells}=    Run Keyword And Continue On Failure    Get WebElements    xpath=//*[@id="center"]/div/div[1]/div[3]/div/div/div[contains(@class,"ag-header-cell")]
     ${actual_columns}=    Run Keyword And Continue On Failure    Create List
@@ -282,3 +282,98 @@ CPS30 ELJÁRÁS oldal megnyitása
         ${col}=    Convert To Lowercase    ${col}
         Run Keyword And Continue On Failure    Should Contain    ${actual_columns}    ${col}
     END
+
+# Kilépés az Eljárás Eredménye ablakból az ESCAPE gombbal
+    Press Keys    xpath=//body    ESCAPE
+    Sleep    1s
+
+##### Ajánlat áttekintése gomb megnyomása (pontos id alapján)
+    Wait Until Element Is Visible    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/ButtonDropDown_BidOverview"]    2s
+    Scroll Element Into View    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/ButtonDropDown_BidOverview"]
+    Click Element    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/ButtonDropDown_BidOverview"]
+    Wait Until Element Is Visible    xpath=//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/ButtonDropDown_BidOverview_dropdown"]    5s
+    Click Element    xpath=//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/ButtonDropDown_BidOverview_item_BidLines"]
+    Sleep    1s
+
+# Ajánlat sorok áttekintése táblázat
+    ${expected_columns}=    Create List    CIKK NÉV    MENNYISÉG    EGYSÉG    SZÁLLÍTÁSI DÁTUM    INFÓ A SZÁLLÍTÓNAK    MEGJEGYZÉSEK  
+    Validate Table Columns    @{expected_columns}
+    Sleep    1s
+
+    Click Element    xpath=(//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventBidLineOverView/1//_activeTab"]//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row-level-1")][1]//div[@colid="ItemName"])
+    Sleep    1s
+
+# Licit elemek összesítése táblázat fejlécének kigyűjtése és validálása
+    ${header_cells}=    Get WebElements    xpath=//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventBidLineOverView/2//_activeTab"]//div[contains(@class,"ag-header-cell")]
+    ${actual_columns}=    Run Keyword And Continue On Failure    Create List
+    FOR    ${cell}    IN    @{header_cells}
+        ${text}=    Run Keyword And Continue On Failure    Get Text    ${cell}
+        ${text}=    Strip String    ${text}
+        IF    $text == ''
+            ${text}=    Run Keyword And Continue On Failure    Get Element Attribute    ${cell}    title
+            ${text}=    Strip String    ${text}
+        END
+        ${text}=    Convert To Lowercase    ${text}
+        Run Keyword And Continue On Failure    Log    Fejléc cella szöveg: ${text}
+        # Csak akkor adjuk hozzá, ha nem üres és még nincs a listában (megelőzi a duplikációt)
+        IF    $text != '' and $text not in $actual_columns
+             ${actual_columns}=    Run Keyword And Continue On Failure    Set Variable    ${actual_columns} + [${text}]
+         END
+    END
+    Run Keyword And Continue On Failure    Log    Talált oszlopok: ${actual_columns}
+
+# Elvárt oszlopnevek kisbetűsítve
+    ${elvart_oszlopok}=    Create List    szállító azonosító    szállító neve    részterület    eljárás szakasz sorszáma    eljárás szakasz    benyújtás dátuma    cikkszám    cikk neve    mennyiség    mértékegység    egységár    kedvezmény    nettó összeg    áfa (%)    bruttó összeg    szállító cikk részletek
+    Log    Elvárt oszlopok: ${elvart_oszlopok}
+
+    FOR    ${col}    IN    @{elvart_oszlopok}
+        ${col}=    Strip String    ${col}
+        ${col}=    Convert To Lowercase    ${col}
+        Run Keyword And Continue On Failure    Should Contain    ${actual_columns}    ${col}
+    END
+
+
+# Kilépés az Ajánlat sorok áttekintése ablakból az ESCAPE gombbal
+    Press Keys    xpath=//body    ESCAPE
+    Sleep    1s
+
+
+##### Ajánlat áttekintése gomb megnyomása (pontos id alapján)
+    Wait Until Element Is Visible    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/ButtonDropDown_BidOverview"]    2s
+    Click Element    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/ButtonDropDown_BidOverview"]
+    Wait Until Element Is Visible    xpath=//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/ButtonDropDown_BidOverview_item_TermLines"]    5s
+    Click Element    xpath=//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/ButtonDropDown_BidOverview_item_TermLines"]
+    Sleep    1s
+
+# Ajánlat feltételek áttekintése táblázat
+    ${expected_columns}=    Create List    FELTÉTEL TÍPUSA    KÉRDÉS  
+    Validate Table Columns    @{expected_columns}
+    Sleep    1s  
+
+# Ajánlati fetételek táblázat ban az első sor kiválasztása
+    Click Element    xpath=(//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventTermOverView/1//_activeTab"]//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[2]
+    Sleep    2s 
+         
+# Kilépés az Ajánlati feltételek áttekintése ablakból az ESCAPE gombbal
+    Press Keys    xpath=//body    ESCAPE
+    Sleep    1s
+
+
+##### Eljárás eredménye gomb megnyomása
+    Wait Until Element Is Visible    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/SourcingEventResult"]    2s
+    Click Element    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/SourcingEventResult"]
+    Sleep    1s
+
+# Eljárás eredménye, Részterületek táblázat
+    ${expected_columns}=    Create List    SORSZÁM    RÉSZTERÜLET  
+    Validate Table Columns    @{expected_columns}  
+    Sleep    1s  
+
+    Click Element    xpath=(//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventResult/1//_activeTab"]//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[1]
+    Sleep    1s 
+
+# Eredmény adatok táblázat
+    ${expected_columns}=    Create List    ELJÁRÁS SZAKASZ    ELJÁRÁS SZAKASZ SORSZÁMA    GAZDASÁGI SZEREPLŐ NEVE    BENYÚJTÁS DÁTUMA    VÉGLEGES AJÁNLAT?    ÉRVÉNYES AJÁNLATOT TETT?    NYERTES?    ELLENSZOLGÁLTATÁS ÖSSZEGE (NETTÓ)
+    Validate Table Columns    @{expected_columns}
+    Sleep    2s
+
