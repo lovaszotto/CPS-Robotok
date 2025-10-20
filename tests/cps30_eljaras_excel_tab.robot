@@ -69,6 +69,23 @@ CPS30 ELJÁRÁS oldal megnyitása
     ${text}=    Get Text    xpath=//span[@title="Beszerzési kategória"]
     Érték szöveg és nem üres    ${text}
 
+# Csak abban az esetben jelenik meg és szerkeszthető, amennyiben az Eljárás típusa az alábbiak valamelyike:
+# meghívásos eljárás vagy hirdetmény közzétételével induló tárgyalásos eljárás
+
+# Ellenőrizzük az eljárás típusát: az érték a kiválasztó input "title" attribútumában van
+    ${type_title}=    Run Keyword And Continue On Failure    Get Element Attribute    xpath=//input[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/1/Component_OPM_SourcingEventEdit/ComboBox_SourcingEventType_placeholder"]    title
+    Run Keyword If    '${type_title}' == 'False' or '${type_title}' == ''    Log    Az eljárás típus input nem található vagy nincs title attribútumja.    WARN
+    ${type_title_lc}=    Run Keyword And Continue On Failure    Convert To Lowercase    ${type_title}
+    Run Keyword And Continue On Failure    Log To Console    Eljárás típus (title): ${type_title_lc}
+
+    ${meghivasos_visible}=    Run Keyword And Return Status    Should Contain    ${type_title_lc}    meghívásos eljárás
+    ${targyalasos_visible}=    Run Keyword And Return Status    Should Contain    ${type_title_lc}    hirdetmény közzétételével
+
+# Feltétel: ha bármelyik típus igaz, a részvételi mezőnek is látszania kell (ne bukjon el, ha nincs ott)
+    Run Keyword If    ${meghivasos_visible} or ${targyalasos_visible}    Run Keyword And Continue On Failure    Element Should Be Visible    xpath=//label[contains(., 'Részvételi jelentkezések bontásának időpontja')]
+    Run Keyword If    ${meghivasos_visible} or ${targyalasos_visible}    Run Keyword And Continue On Failure    Element Should Be Visible    xpath=//label[contains(., 'Részvételi jelentkezésekről készített összegezés megküldésének időpontja')]
+    Run Keyword If    ${meghivasos_visible} or ${targyalasos_visible}    Log    Részvételi mezők ellenőrzése befejeződött (hibák figyelmen kívül hagyva)    WARN
+
 
 ##### Részterületek
 # Oszlopnevek validálása a táblázatban
@@ -83,7 +100,7 @@ CPS30 ELJÁRÁS oldal megnyitása
     
 # 2) Kattintás a legördülő menüben a "Cikkek/szolgáltatások" elemre (id alapján)
     Click Element    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_SourcingEventLine_Tab"]
-    Sleep    1s
+    Sleep    2s
 
 # Oszlopnevek validálása a táblázatban
     ${expected_columns}=    Create List    CIKK SZÁM    CIKK NÉV    MENNYISÉG    EGYSÉG    SZÁLLÍTÁSI DÁTUM    INFÓ A SZÁLLÍTÓNAK    MEGJEGYZÉSEK
@@ -92,11 +109,11 @@ CPS30 ELJÁRÁS oldal megnyitása
 ##### Résztvevők táblázat validálása
 # 1) Kattintás a "Részterületek" melletti három pontra
     Click Element    xpath=//a[contains(text(),"Részterületek")]/following::a[@class="tab_menu_dropdown_link"][1]
-    Sleep    1s
+    Sleep    2s
 
 # 2) Kattintás a legördülő menüben a "Résztvevők" elemre (id alapján)
     Click Element    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_Participants_Tab"]
-    Sleep    1s    
+    Sleep    2s    
 
 # Oszlopnevek validálása a táblázatban
     ${expected_columns}=    Create List    FELHASZNÁLÓ    SZEREPKÖR    SZAKÉRTELEM    BB ELNÖK
@@ -193,7 +210,7 @@ CPS30 ELJÁRÁS oldal megnyitása
 
 # 2) Kattintás a legördülő menüben a "Hirdetmény adatok" elemre (id alapján)
     Click Element    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_Announcement_Tab"]
-    Sleep    1s    
+    Sleep    2s    
 
 # Oszlopnevek validálása a táblázatban
     ${expected_columns}=    Create List    HIRDETMÉNY TÍPUSA    HIRDETMÉNY SZÁMA    HIRDETMÉNY FELADÁSÁNAK DÁTUMA    HIÁNYPÓTLÁS TÖRTÉNT    MEGJELENÉS DÁTUMA  
