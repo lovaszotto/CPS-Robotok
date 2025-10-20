@@ -268,11 +268,12 @@ CPS30 ELJÁRÁS oldal megnyitása
     ${expected_columns}=    Create List    SORSZÁM    RÉSZTERÜLET  
     Validate Table Columns    @{expected_columns}
 
+# Kilépés az Eljárás Eredménye ablakból az ESCAPE gombbal
+    Press Keys    xpath=//body    ESCAPE
+    Sleep    1s
+
 
 ##### Ajánlatok tab alatt lévő ag-Grid táblázat fejlécének pontos kigyűjtése (header row div alapján)
-# Várjuk, hogy a felugró ablak megjelenjen
-    Wait Until Element Is Visible    xpath=//*[@id="screen_1"]/div[2]/div
-
     ${header_cells}=    Run Keyword And Continue On Failure    Get WebElements    xpath=//*[@id="center"]/div/div[1]/div[3]/div/div/div[contains(@class,"ag-header-cell")]
     ${actual_columns}=    Run Keyword And Continue On Failure    Create List
     FOR    ${cell}    IN    @{header_cells}
@@ -300,9 +301,6 @@ CPS30 ELJÁRÁS oldal megnyitása
         Run Keyword And Continue On Failure    Should Contain    ${actual_columns}    ${col}
     END
 
-# Kilépés az Eljárás Eredménye ablakból az ESCAPE gombbal
-    Press Keys    xpath=//body    ESCAPE
-    Sleep    1s
 
 ##### Ajánlat áttekintése gomb megnyomása (pontos id alapján)
     Wait Until Element Is Visible    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/ButtonDropDown_BidOverview"]    2s
