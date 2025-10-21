@@ -11,7 +11,8 @@ ${URL}    https://172.28.30.5/cps30/MM_CPS_Sourcing/Screen_CPS_SourcingEvent
 *** Keywords ***
 Érték szöveg és nem üres
     [Arguments]    ${text}
-    Should Be True    '${text}' != ''    Az érték nem szöveg!
+    # Biztonságosabb ellenőrzés: csak ellenőrizzük, hogy nem üres és nem None
+    Run Keyword If    $text == 'None' or $text == ''    Fail    Az érték nem szöveg vagy üres!
     Should Not Be Empty    ${text}    Az érték üres!
 
 *** Test Cases ***
@@ -108,3 +109,60 @@ CPS30 ELJÁRÁS oldal megnyitása
     Érték szöveg és nem üres    ${text}
     ${text}=    Get Text    xpath=//span[@title="Benyújtási határidő"]
     Érték szöveg és nem üres    ${text}
+
+
+##### Cikkek/szolgáltatások táblázat validálása
+# Oszlopnevek validálása a táblázatban
+    ${header_cells}=    Run Keyword And Continue On Failure    Get WebElements    xpath=//*[@id="center"]/div/div[1]/div[3]/div/div/div[contains(@class,"ag-header-cell")]
+    ${actual_columns}=    Run Keyword And Continue On Failure    Create List
+    FOR    ${cell}    IN    @{header_cells}
+        ${text}=    Run Keyword And Continue On Failure    Get Text    ${cell}
+        ${text}=    Strip String    ${text}
+        IF    $text == ''
+            ${text}=    Run Keyword And Continue On Failure    Get Element Attribute    ${cell}    title
+            ${text}=    Strip String    ${text}
+        END
+        ${text}=    Convert To Lowercase    ${text}
+        Run Keyword And Continue On Failure    Log    Fejléc cella szöveg: ${text}
+        IF    $text != ''
+            ${actual_columns}=    Run Keyword And Continue On Failure    Set Variable    ${actual_columns} + [${text}]
+        END
+    END
+    Run Keyword And Continue On Failure    Log    Talált oszlopok: ${actual_columns}
+
+    # Elvárt oszlopnevek
+    ${elvart_oszlopok}=    Create List    RÉSZTERÜLET    CIKK SZÁM    CIKK NEVE    MENNYISÉG    EGYSÉG    SZÁLLÍTÓ INFÓ    SZÁLLÍTÓI CIKK SZÁM    SZÁLLÍTÓI CIKK NÉV    MEGJEGYZÉSEK    NETTÓ ÖSSZEG    ADÓ KÓD    ÁFA (%)    BRUTTÓ ÖSSZEG    ÁR
+    Log    Elvárt oszlopok: ${elvart_oszlopok}
+
+    FOR    ${col}    IN    @{elvart_oszlopok}
+        ${col}=    Strip String    ${col}
+        ${col}=    Convert To Lowercase    ${col}
+        Run Keyword And Continue On Failure    Should Contain    ${actual_columns}    ${col}
+    END     
+
+##### Feltételek
+    Click Element    xpath=//*[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventBidEdit/2//_tab_SourcingEventTerm_Tab"]/div    
+    Sleep    1s
+
+# Oszlopnevek validálása a táblázatban
+    ${expected_columns}=    Create List    SORSZÁM    KÉRDÉS    VÁLASZ    MEGJEGYZÉS    MEGVÁLASZOLVA  
+    Validate Table Columns    @{expected_columns}    
+    Sleep    1s
+
+##### Dokumentumok
+    Click Element    xpath=//*[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventBidEdit/2//_tab_Documents_Tab"]/div    
+    Sleep    1s
+
+# Oszlopnevek validálása a táblázatban
+    ${expected_columns}=    Create List    LETÖLTÉS    ELŐNÉZET    DOKUMENTUM    VERZIÓ    DOKUMENTUM TÍPUS    FELTÖLTÉS DÁTUMA    FELTÖLTŐ    KULCSSZAVAK  
+    Validate Table Columns    @{expected_columns}    
+    Sleep    1s    
+
+##### Eredmény
+    Click Element    xpath=//*[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventBidEdit/2//_tab_SourcingEventBidResult_Tab"]/div    
+    Sleep    1s
+
+# Oszlopnevek validálása a táblázatban
+    ${expected_columns}=    Create List    RÉSZTERÜLET    ELLENSZOLGÁLTATÁS ÖSSZEGE (NETTÓ FT)    ÉRVÉNYES AJÁNLATOT TETT?    NYERTES  
+    Validate Table Columns    @{expected_columns}    
+    Sleep    1s        
