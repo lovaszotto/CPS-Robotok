@@ -23,6 +23,7 @@ CPS30 ELJÁRÁS oldal megnyitása
     Wait Until Page Contains Element    xpath=//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")]    30s
 
 # Kattintás az első sor első oszlopában lévő linkre
+    Wait Until Element Is Visible    xpath=(//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[1]//div[@colid="SourcingEventCode"]//a    10s
     Click Element    xpath=(//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[1]//div[@colid="SourcingEventCode"]//a
 
 # Várjuk, hogy a felugró ablak megjelenjen
@@ -95,10 +96,12 @@ CPS30 ELJÁRÁS oldal megnyitása
 
 ##### Cikkek/szolgáltatások táblázat validálása
 # 1) Kattintás a "Részterületek" melletti három pontra
+    Wait Until Element Is Visible    xpath=//a[contains(text(),"Részterületek")]/following::a[@class="tab_menu_dropdown_link"][1]    10s
     Click Element    xpath=//a[contains(text(),"Részterületek")]/following::a[@class="tab_menu_dropdown_link"][1]
     Sleep    2s
     
 # 2) Kattintás a legördülő menüben a "Cikkek/szolgáltatások" elemre (id alapján)
+    Wait Until Element Is Visible    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_SourcingEventLine_Tab"]    10s
     Click Element    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_SourcingEventLine_Tab"]
     Sleep    2s
 
@@ -108,10 +111,12 @@ CPS30 ELJÁRÁS oldal megnyitása
 
 ##### Résztvevők táblázat validálása
 # 1) Kattintás a "Részterületek" melletti három pontra
+    Wait Until Element Is Visible    xpath=//a[contains(text(),"Részterületek")]/following::a[@class="tab_menu_dropdown_link"][1]    10s
     Click Element    xpath=//a[contains(text(),"Részterületek")]/following::a[@class="tab_menu_dropdown_link"][1]
     Sleep    2s
 
 # 2) Kattintás a legördülő menüben a "Résztvevők" elemre (id alapján)
+    Wait Until Element Is Visible    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_Participants_Tab"]    10s
     Click Element    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_Participants_Tab"]
     Sleep    2s    
 
@@ -121,10 +126,12 @@ CPS30 ELJÁRÁS oldal megnyitása
 
 ##### Feltételek táblázat validálása
 # 1) Kattintás a "Részterületek" melletti három pontra
+    Wait Until Element Is Visible    xpath=//a[contains(text(),"Részterületek")]/following::a[@class="tab_menu_dropdown_link"][1]    10s
     Click Element    xpath=//a[contains(text(),"Részterületek")]/following::a[@class="tab_menu_dropdown_link"][1]
     Sleep    1s
 
 # 2) Kattintás a legördülő menüben a "Feltételek" elemre (id alapján)
+    Wait Until Element Is Visible    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_SourcingEventTerm_Tab"]    10s
     Click Element    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_SourcingEventTerm_Tab"]
     Sleep    1s    
 
@@ -135,10 +142,12 @@ CPS30 ELJÁRÁS oldal megnyitása
 
 ##### Beadási dátumok táblázat validálása
 # 1) Kattintás a "Részterületek" melletti három pontra
+    Wait Until Element Is Visible    xpath=//a[contains(text(),"Részterületek")]/following::a[@class="tab_menu_dropdown_link"][1]    10s
     Click Element    xpath=//a[contains(text(),"Részterületek")]/following::a[@class="tab_menu_dropdown_link"][1]
     Sleep    1s
 
 # 2) Kattintás a legördülő menüben a "Beadási dátumok" elemre (id alapján)
+    Wait Until Element Is Visible    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_BidSubmissionDate_Tab"]    10s
     Click Element    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_BidSubmissionDate_Tab"]
     Sleep    1s    
 
@@ -149,10 +158,12 @@ CPS30 ELJÁRÁS oldal megnyitása
 
 ##### Jóváhagyók
 # 1) Kattintás a "Részterületek" melletti három pontra
+    Wait Until Element Is Visible    xpath=//a[contains(text(),"Részterületek")]/following::a[@class="tab_menu_dropdown_link"][1]    10s
     Click Element    xpath=//a[contains(text(),"Részterületek")]/following::a[@class="tab_menu_dropdown_link"][1]
     Sleep    1s
 
 # 2) Kattintás a legördülő menüben a "Jóváhagyók" elemre (id alapján)
+    Wait Until Element Is Visible    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_Approver_Tab"]    10s
     Click Element    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_Approver_Tab"]
     Sleep    1s    
 
@@ -163,10 +174,12 @@ CPS30 ELJÁRÁS oldal megnyitása
 
 ##### Dokumentumok
 # 1) Kattintás a "Részterületek" melletti három pontra
+    Wait Until Element Is Visible    xpath=//a[contains(text(),"Részterületek")]/following::a[@class="tab_menu_dropdown_link"][1]    10s
     Click Element    xpath=//a[contains(text(),"Részterületek")]/following::a[@class="tab_menu_dropdown_link"][1]
     Sleep    1s
 
 # 2) Kattintás a legördülő menüben a "Dokumentumok" elemre (id alapján)
+    Wait Until Element Is Visible    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_Documents_Tab"]    10s
     Click Element    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_Documents_Tab"]
     Sleep    1s    
 
@@ -177,10 +190,12 @@ CPS30 ELJÁRÁS oldal megnyitása
 
 ##### Kommunikáció
 # 1) Kattintás a "Részterületek" melletti három pontra
+    Wait Until Element Is Visible    xpath=//a[contains(text(),"Részterületek")]/following::a[@class="tab_menu_dropdown_link"][1]    10s
     Click Element    xpath=//a[contains(text(),"Részterületek")]/following::a[@class="tab_menu_dropdown_link"][1]
     Sleep    1s
 
 # 2) Kattintás a legördülő menüben a "Kommunikáció" elemre (id alapján)
+    Wait Until Element Is Visible    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_Communications_Tab"]    10s
     Click Element    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_Communications_Tab"]
     Sleep    1s    
 
@@ -191,10 +206,12 @@ CPS30 ELJÁRÁS oldal megnyitása
 
 ##### Ellenőrzés adatok
 # 1) Kattintás a "Részterületek" melletti három pontra
+    Wait Until Element Is Visible    xpath=//a[contains(text(),"Részterületek")]/following::a[@class="tab_menu_dropdown_link"][1]    10s
     Click Element    xpath=//a[contains(text(),"Részterületek")]/following::a[@class="tab_menu_dropdown_link"][1]
     Sleep    1s
 
 # 2) Kattintás a legördülő menüben a "Ellenőrzés adatok" elemre (id alapján)
+    Wait Until Element Is Visible    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_Audit_Tab"]    10s
     Click Element    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_Audit_Tab"]
     Sleep    1s    
 
@@ -205,10 +222,12 @@ CPS30 ELJÁRÁS oldal megnyitása
 
 ##### Hirdetmény adatok
 # 1) Kattintás a "Részterületek" melletti három pontra
+    Wait Until Element Is Visible    xpath=//a[contains(text(),"Részterületek")]/following::a[@class="tab_menu_dropdown_link"][1]    10s
     Click Element    xpath=//a[contains(text(),"Részterületek")]/following::a[@class="tab_menu_dropdown_link"][1]
     Sleep    1s
 
 # 2) Kattintás a legördülő menüben a "Hirdetmény adatok" elemre (id alapján)
+    Wait Until Element Is Visible    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_Announcement_Tab"]    10s
     Click Element    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_Announcement_Tab"]
     Sleep    2s    
 
@@ -219,14 +238,17 @@ CPS30 ELJÁRÁS oldal megnyitása
 
 ##### Feladatok táblázat validálása
 # 1) Kattintás a "Részterületek" melletti három pontra
+    Wait Until Element Is Visible    xpath=//a[contains(text(),"Részterületek")]/following::a[@class="tab_menu_dropdown_link"][1]    10s
     Click Element    xpath=//a[contains(text(),"Részterületek")]/following::a[@class="tab_menu_dropdown_link"][1]
     Sleep    1s
     
 # 2) Kattintás a legördülő menüben a "Feladatok" elemre (id alapján)
+    Wait Until Element Is Visible    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_Tasks_Tab"]    10s
     Click Element    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_Tasks_Tab"]
     Sleep    1s
 
 # 3) Kattintás az első elemre a feladatok közül, ott pedig a linkre
+    Wait Until Element Is Visible    xpath=(//a[contains(@class,"card-owf-task-title")])[1]    10s
     Click Element    xpath=(//a[contains(@class,"card-owf-task-title")])[1]
     Sleep    1s
 
@@ -307,6 +329,7 @@ CPS30 ELJÁRÁS oldal megnyitása
     Scroll Element Into View    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/ButtonDropDown_BidOverview"]
     Click Element    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/ButtonDropDown_BidOverview"]
     Wait Until Element Is Visible    xpath=//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/ButtonDropDown_BidOverview_dropdown"]    5s
+    Wait Until Element Is Visible    xpath=//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/ButtonDropDown_BidOverview_item_BidLines"]    5s
     Click Element    xpath=//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/ButtonDropDown_BidOverview_item_BidLines"]
     Sleep    1s
 
@@ -315,6 +338,7 @@ CPS30 ELJÁRÁS oldal megnyitása
     Validate Table Columns    @{expected_columns}
     Sleep    1s
 
+    Wait Until Element Is Visible    xpath=(//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventBidLineOverView/1//_activeTab"]//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row-level-1")][1]//div[@colid="ItemName"])    10s
     Click Element    xpath=(//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventBidLineOverView/1//_activeTab"]//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row-level-1")][1]//div[@colid="ItemName"])
     Sleep    1s
 
@@ -366,6 +390,7 @@ CPS30 ELJÁRÁS oldal megnyitása
     Sleep    1s  
 
 # Ajánlati fetételek táblázat ban az első sor kiválasztása
+    Wait Until Element Is Visible    xpath=(//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventTermOverView/1//_activeTab"]//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[2]    10s
     Click Element    xpath=(//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventTermOverView/1//_activeTab"]//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[2]
     Sleep    2s 
          
@@ -384,6 +409,7 @@ CPS30 ELJÁRÁS oldal megnyitása
     Validate Table Columns    @{expected_columns}  
     Sleep    1s  
 
+    Wait Until Element Is Visible    xpath=(//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventResult/1//_activeTab"]//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[1]    10s
     Click Element    xpath=(//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventResult/1//_activeTab"]//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[1]
     Sleep    1s 
 

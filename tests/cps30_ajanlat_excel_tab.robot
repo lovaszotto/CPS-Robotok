@@ -24,6 +24,7 @@ CPS30 ELJÁRÁS oldal megnyitása
     Wait Until Page Contains Element    xpath=//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")]    30s
 
 # Kattintás az első sor első oszlopában lévő linkre
+    Wait Until Element Is Visible    xpath=(//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[1]//div[@colid="SourcingEventCode"]//a    10s
     Click Element    xpath=(//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[1]//div[@colid="SourcingEventCode"]//a
 
 # Várjuk, hogy az Ajánlatok tab felugró ablak megjelenjen
@@ -33,6 +34,7 @@ CPS30 ELJÁRÁS oldal megnyitása
 
 ##### Ajánlatok tab
 # Kattintsunk az első sor első mezőjére, linkre
+    Wait Until Element Is Visible    xpath=(//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row") and contains(@class,'ag-row-level-1')])[1]//div[@colid="PartnerCode"]//a    10s
     Click Element    xpath=(//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row") and contains(@class,'ag-row-level-1')])[1]//div[@colid="PartnerCode"]//a
     Sleep    3s
 
@@ -141,6 +143,7 @@ CPS30 ELJÁRÁS oldal megnyitása
     END     
 
 ##### Feltételek
+    Wait Until Element Is Visible    xpath=//*[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventBidEdit/2//_tab_SourcingEventTerm_Tab"]/div    10s
     Click Element    xpath=//*[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventBidEdit/2//_tab_SourcingEventTerm_Tab"]/div    
     Sleep    1s
 
@@ -150,6 +153,7 @@ CPS30 ELJÁRÁS oldal megnyitása
     Sleep    1s
 
 ##### Dokumentumok
+    Wait Until Element Is Visible    xpath=//*[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventBidEdit/2//_tab_Documents_Tab"]/div    10s
     Click Element    xpath=//*[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventBidEdit/2//_tab_Documents_Tab"]/div    
     Sleep    1s
 
@@ -159,6 +163,7 @@ CPS30 ELJÁRÁS oldal megnyitása
     Sleep    1s    
 
 ##### Eredmény
+    Wait Until Element Is Visible    xpath=//*[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventBidEdit/2//_tab_SourcingEventBidResult_Tab"]/div    10s
     Click Element    xpath=//*[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventBidEdit/2//_tab_SourcingEventBidResult_Tab"]/div    
     Sleep    1s
 
