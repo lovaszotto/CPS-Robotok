@@ -2,11 +2,8 @@
 Library    SeleniumLibrary
 Library    String
 Library    Collections
-Resource    ../resources/cps30_login.resource
+Resource    ../resources/oriana_login.resource
 Resource    ../resources/table_keywords.resource
-
-*** Variables ***
-${URL}    https://172.28.30.5/cps30/MM_CPS_Sourcing/Screen_CPS_SourcingEvent
 
 *** Keywords ***
 Érték szöveg és nem üres
@@ -14,13 +11,91 @@ ${URL}    https://172.28.30.5/cps30/MM_CPS_Sourcing/Screen_CPS_SourcingEvent
     Should Be True    '${text}' != ''    Az érték nem szöveg!
     Should Not Be Empty    ${text}    Az érték üres!
 
+*** Keywords ***
+Handle Modal Dialog
+    # Modal ablak ellenőrzés és ESC megnyomása ha van
+    ${modal_present}=    Run Keyword And Return Status    Element Should Be Visible    css=.bootbox.modal
+    Run Keyword If    ${modal_present}    Press Keys    None    ESCAPE
+    Run Keyword If    ${modal_present}    Sleep    1s
+    Run Keyword If    ${modal_present}    Log    Modal ablak bezárva ESC-cel    
+
 *** Test Cases ***
 
 CPS30 ELJÁRÁS oldal megnyitása
     Bejelentkezés admin felhasználóval
 
+# Modal ablak kezelése ha van
+    Handle Modal Dialog    
+
+# Kattintás a három-pont menüre (ellipsis toggle)
+    Wait Until Element Is Visible    id=menu_mm_ellipsisToggle    10s
+    Click Element    id=menu_mm_ellipsisToggle
+    Sleep    2s
+
+# Kiválasztjuk az "Eljárás" menüpontot
+    Wait Until Element Is Visible    id=menu_mm_MM_CPS_Sourcing    10s
+    Click Element    id=menu_mm_MM_CPS_Sourcing
+    Sleep    3s
+
 # Várjuk, hogy az ag-Grid fő táblázat megjelenjen
     Wait Until Page Contains Element    xpath=//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")]    30s
+
+# Modal ablak kezelése ha van
+    Handle Modal Dialog
+    Sleep    3s
+
+# Kattintás az első sorra
+    Wait Until Element Is Visible    xpath=(//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[1]    10s
+    Click Element    xpath=(//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[1]
+
+# Várjuk, hogy az Adminisztráció a táblázat betöltődjön
+    Wait Until Element Is Visible    xpath=//table[@class="OPM_GeneralTable_Table"]    30s
+    Sleep    4s
+
+##### Adminisztráció blokk elemzése
+    ${text}=    Get Text    xpath=//table[@class="OPM_GeneralTable_Table"]//td[@title="Eljárás azonosító"]
+    Érték szöveg és nem üres    ${text}
+    ${text}=    Get Text    xpath=//table[@class="OPM_GeneralTable_Table"]//td[@title="Beszerzési konstrukció"]
+    Érték szöveg és nem üres    ${text}
+    ${text}=    Get Text    xpath=//table[@class="OPM_GeneralTable_Table"]//td[@title="Az eljárás keretmegállapodás megkötésére irányul?"]
+    Érték szöveg és nem üres    ${text}
+    ${text}=    Get Text    xpath=//table[@class="OPM_GeneralTable_Table"]//td[@title="Az eljárás keretmegállapodás alapján történő szerződéskötésre irányul?"]
+    Érték szöveg és nem üres    ${text}
+    ${text}=    Get Text    xpath=//table[@class="OPM_GeneralTable_Table"]//td[@title="Eljárás típus"]
+    Érték szöveg és nem üres    ${text}
+    ${text}=    Get Text    xpath=//table[@class="OPM_GeneralTable_Table"]//td[@title="Beszerzés tárgya"]
+    Érték szöveg és nem üres    ${text}
+    ${text}=    Get Text    xpath=//table[@class="OPM_GeneralTable_Table"]//td[@title="Státusz"]
+    Érték szöveg és nem üres    ${text}
+    ${text}=    Get Text    xpath=//table[@class="OPM_GeneralTable_Table"]//td[@title="Folyamat állapota"]
+    Érték szöveg és nem üres    ${text}
+    ${text}=    Get Text    xpath=//table[@class="OPM_GeneralTable_Table"]//td[@title="Beszerzés státusz"]
+    Érték szöveg és nem üres    ${text}
+    ${text}=    Get Text    xpath=//table[@class="OPM_GeneralTable_Table"]//td[@title="Becsült érték (nettó)"]
+    Érték szöveg és nem üres    ${text}
+    ${text}=    Get Text    xpath=//table[@class="OPM_GeneralTable_Table"]//td[@title="Rendelkezésre álló fedezet összesen (nettó Ft)"]
+    Érték szöveg és nem üres    ${text}
+    ${text}=    Get Text    xpath=//table[@class="OPM_GeneralTable_Table"]//td[@title="Rendelkezésre álló fedezet összesen (bruttó Ft)"]
+    Érték szöveg és nem üres    ${text}
+    ${text}=    Get Text    xpath=//table[@class="OPM_GeneralTable_Table"]//td[@title="Pénznem"]
+    Érték szöveg és nem üres    ${text}
+    ${text}=    Get Text    xpath=//table[@class="OPM_GeneralTable_Table"]//td[@title="Eljárásrend"]
+    Érték szöveg és nem üres    ${text}
+    ${text}=    Get Text    xpath=//table[@class="OPM_GeneralTable_Table"]//td[@title="Beszerzés tárgyának típusa"]
+    Érték szöveg és nem üres    ${text}
+    ${text}=    Get Text    xpath=//table[@class="OPM_GeneralTable_Table"]//td[@title="A beszerzés tartalmaz-e, illetve érint-e minősített adatot"]
+    Érték szöveg és nem üres    ${text}
+    ${text}=    Get Text    xpath=//table[@class="OPM_GeneralTable_Table"]//td[@title="Beszerzés célja"]
+    Érték szöveg és nem üres    ${text}
+    ${text}=    Get Text    xpath=//table[@class="OPM_GeneralTable_Table"]//td[@title="Fő CPV kód"]
+    Érték szöveg és nem üres    ${text}
+    ${text}=    Get Text    xpath=//table[@class="OPM_GeneralTable_Table"]//td[@title="Szervező"]
+    Érték szöveg és nem üres    ${text}
+    ${text}=    Get Text    xpath=//table[@class="OPM_GeneralTable_Table"]//td[@title="Szervezeti egység"]
+    Érték szöveg és nem üres    ${text}
+    ${text}=    Get Text    xpath=//table[@class="OPM_GeneralTable_Table"]//td[@title="Beszerzési igazgatóság"]
+    Érték szöveg és nem üres    ${text}
+    Sleep    2s
 
 # Kattintás az első sor első oszlopában lévő linkre
     Wait Until Element Is Visible    xpath=(//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[1]//div[@colid="SourcingEventCode"]//a    10s
@@ -28,85 +103,28 @@ CPS30 ELJÁRÁS oldal megnyitása
 
 # Várjuk, hogy a felugró ablak megjelenjen
     Wait Until Element Is Visible    xpath=//*[@id="screen_1"]/div[2]/div
-    Sleep    10s
+    Sleep    6s
 
-##### Adminisztráció blokk elemzése
-    ${text}=    Get Text    xpath=//span[@title="Eljárás azonosító"]
-    Érték szöveg és nem üres    ${text}
-    ${text}=    Get Text    xpath=//span[@title="Fő CPV kód"]
-    Érték szöveg és nem üres    ${text}
-    ${text}=    Get Text    xpath=//span[@title="Szervező"]
-    Érték szöveg és nem üres    ${text}
-    ${text}=    Get Text    xpath=//span[@title="Vállalat"]
-    Érték szöveg és nem üres    ${text}
-    ${text}=    Get Text    xpath=//span[@title="Szervezeti egység"]
-    Érték szöveg és nem üres    ${text}
-    ${text}=    Get Text    xpath=//span[@title="Beszerzési szervezeti egység"]
-    Érték szöveg és nem üres    ${text}
-    ${text}=    Get Text    xpath=//span[@title="Ajánlatkérői minőség"]
-    Érték szöveg és nem üres    ${text}
-    ${text}=    Get Text    xpath=//span[@title="Benyújtott ajánlatok száma"]
-    Érték szöveg és nem üres    ${text}
-    ${text}=    Get Text    xpath=//span[@title="Eredmény"]
-    Érték szöveg és nem üres    ${text}
-    ${text}=    Get Text    xpath=//span[@title="Megjegyzés"]
-    Érték szöveg és nem üres    ${text}
-    ${text}=    Get Text    xpath=//span[@title="Eljárás indítás időpontja"]
-    Érték szöveg és nem üres    ${text}
-    ${text}=    Get Text    xpath=//span[@title="Ajánlatok bontásának időpontja"]
-    Érték szöveg és nem üres    ${text}
-    ${text}=    Get Text    xpath=//span[@title="Ajánlatok elbírálásáról készített összegezés megküldésének időpontja"]
-    Érték szöveg és nem üres    ${text}
-    ${text}=    Get Text    xpath=//span[@title="Igény azonosító"]
-    Érték szöveg és nem üres    ${text}
-    ${text}=    Get Text    xpath=//span[@title="Igény típusa"]
-    Érték szöveg és nem üres    ${text}
-    ${text}=    Get Text    xpath=//span[@title="Tervsor azonosító"]
-    Érték szöveg és nem üres    ${text}
-    ${text}=    Get Text    xpath=//span[@title="Tervezett beszerzés"]
-    Érték szöveg és nem üres    ${text}
-    ${text}=    Get Text    xpath=//span[@title="Költségtípus"]
-    Érték szöveg és nem üres    ${text}
-    ${text}=    Get Text    xpath=//span[@title="Beszerzési kategória"]
-    Érték szöveg és nem üres    ${text}
-
-# Csak abban az esetben jelenik meg és szerkeszthető, amennyiben az Eljárás típusa az alábbiak valamelyike:
-# meghívásos eljárás vagy hirdetmény közzétételével induló tárgyalásos eljárás
-
-# Ellenőrizzük az eljárás típusát: az érték a kiválasztó input "title" attribútumában van
-    ${type_title}=    Run Keyword And Continue On Failure    Get Element Attribute    xpath=//input[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/1/Component_OPM_SourcingEventEdit/ComboBox_SourcingEventType_placeholder"]    title
-    Run Keyword If    '${type_title}' == 'False' or '${type_title}' == ''    Log    Az eljárás típus input nem található vagy nincs title attribútumja.    WARN
-    ${type_title_lc}=    Run Keyword And Continue On Failure    Convert To Lowercase    ${type_title}
-    Run Keyword And Continue On Failure    Log To Console    Eljárás típus (title): ${type_title_lc}
-
-    ${meghivasos_visible}=    Run Keyword And Return Status    Should Contain    ${type_title_lc}    meghívásos eljárás
-    ${targyalasos_visible}=    Run Keyword And Return Status    Should Contain    ${type_title_lc}    hirdetmény közzétételével
-
-# Feltétel: ha bármelyik típus igaz, a részvételi mezőnek is látszania kell (ne bukjon el, ha nincs ott)
-    Run Keyword If    ${meghivasos_visible} or ${targyalasos_visible}    Run Keyword And Continue On Failure    Element Should Be Visible    xpath=//label[contains(., 'Részvételi jelentkezések bontásának időpontja')]
-    Run Keyword If    ${meghivasos_visible} or ${targyalasos_visible}    Run Keyword And Continue On Failure    Element Should Be Visible    xpath=//label[contains(., 'Részvételi jelentkezésekről készített összegezés megküldésének időpontja')]
-    Run Keyword If    ${meghivasos_visible} or ${targyalasos_visible}    Log    Részvételi mezők ellenőrzése befejeződött (hibák figyelmen kívül hagyva)    WARN
-
-
-##### Részterületek
+##### Kapcsolódó igények
 # Oszlopnevek validálása a táblázatban
-    ${expected_columns}=    Create List    SORSZÁM    RÉSZTERÜLET
+    ${expected_columns}=    Create List    IGÉNY AZONOSÍTÓK    SZERVEZET    TERVSOR AZONOSÍTÓ    TERVEZETT BESZERZÉS
     Validate Table Columns    @{expected_columns}
 
 
-##### Cikkek/szolgáltatások táblázat validálása
-# 1) Kattintás a "Részterületek" melletti három pontra
-    Wait Until Element Is Visible    xpath=//a[contains(text(),"Részterületek")]/following::a[@class="tab_menu_dropdown_link"][1]    10s
-    Click Element    xpath=//a[contains(text(),"Részterületek")]/following::a[@class="tab_menu_dropdown_link"][1]
+##### Részajánlati körök táblázat validálása
+# 1) Kattintás a "Részajánlati körök" melletti három pontra
+    Wait Until Element Is Visible    xpath=//a[contains(text(),"Részajánlati körök")]/following::a[@class="tab_menu_dropdown_link"][1]    10s
+    Click Element    xpath=//a[contains(text(),"Részajánlati körök")]/following::a[@class="tab_menu_dropdown_link"][1]
     Sleep    2s
     
-# 2) Kattintás a legördülő menüben a "Cikkek/szolgáltatások" elemre (id alapján)
-    Wait Until Element Is Visible    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_SourcingEventLine_Tab"]    10s
-    Click Element    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_SourcingEventLine_Tab"]
+# 2) Kattintás a legördülő menüben a "Részajánlati körök" elemre (id alapján)
+    Wait Until Element Is Visible    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_SubArea_Tab"]    10s
+    Click Element    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_SubArea_Tab"]
     Sleep    2s
 
 # Oszlopnevek validálása a táblázatban
-    ${expected_columns}=    Create List    CIKK SZÁM    CIKK NÉV    MENNYISÉG    EGYSÉG    SZÁLLÍTÁSI DÁTUM    INFÓ A SZÁLLÍTÓNAK    MEGJEGYZÉSEK
+    ${expected_columns}=    Create List    SORSZÁM    RÉSZAJÁNLATI ÖR NEVE    BECSÜLT ÉRTÉK (NETTÓ FT)    RENDELKEZÉSRE ÁLLÓ NETTÓ FEDEZET (FT)    ÁFA (%)    RENDELKEZÉSRE ÁLLÓ BRUTTÓ FEDEZET (FT)
+
     Validate Table Columns    @{expected_columns}
 
 ##### Résztvevők táblázat validálása
