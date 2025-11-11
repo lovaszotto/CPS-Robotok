@@ -114,7 +114,7 @@ Adminisztráció blokk elemzése
 
 # Kattintás az első oszlop index szerinti oszlopában lévő linkre
     Kattintás sor linkre    3
-    Sleep    8s
+    Sleep    10s
 
 
 Kapcsolódó igények menü kiválasztása
@@ -272,7 +272,7 @@ Jóváhagyók validálása a táblázatban
 
 
 Ajánlatok táblázat validálása
-    Validate Table Headers    4    Gazdasági szereplő azonosító    Gazdasági szereplő neve    Kontakt    Státusz    Portál felhasználó    Ajánlat nettó összege    Ajánlat bruttó összege    Pénznem    Benyújtás dátuma    Típus    Eljárás szakasz sorszáma    Eljárás szakasz    Keretmegállapodás azonosító 
+    Validate Table Headers    4    Gazdasági szereplő azonosító    Gazdasági szereplő neve    Státusz    Ajánlat nettó összege    Ajánlat bruttó összege    Pénznem    Benyújtás dátuma    Típus    Eljárás szakasz sorszáma    Eljárás szakasz    Keretmegállapodás / dbr azonosító
     Sleep    2s
 
 ##### Ajánlat sorok áttekintése gomb megnyomása
