@@ -68,7 +68,6 @@ Adminisztráció blokk betöltése
     Sleep    2s
 
 Adminisztráció blokk elemzése
-##### Adminisztráció blokk elemzése
     ${text}=    Get Text    xpath=//table[@class="OPM_GeneralTable_Table"]//td[@title="Eljárás azonosító"]
     Érték szöveg és nem üres    ${text}
     ${text}=    Get Text    xpath=//table[@class="OPM_GeneralTable_Table"]//td[@title="Beszerzési konstrukció"]
@@ -247,13 +246,14 @@ Kommunikáció menü kiválasztása
     Click Element    xpath=//a[contains(text(),"Dokumentumok")]/following::a[@class="tab_menu_dropdown_link"][1]
 
 # 2) Kattintás a legördülő menüben a "Kommunikáció" elemre (id alapján)
-    Wait Until Element Is Visible    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_Documents_Tab"]    10s
-    Click Element    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_Documents_Tab"]
+    Wait Until Element Is Visible    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_Communications_Tab"]    10s
+    Click Element    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_Communications_Tab"]
     Sleep    5s    
 
 Kommunikáció validálása a táblázatban
     Validate Table Headers    3    TÁRGY    CÍMZETT    KIKÜLDÉS DÁTUMA    STÁTUSZ
     Sleep    2s
+
 
 #Jóváhagyók menü kiválasztása
 ##### Jóváhagyók
@@ -274,3 +274,60 @@ Kommunikáció validálása a táblázatban
 Ajánlatok táblázat validálása
     Validate Table Headers    4    Gazdasági szereplő azonosító    Gazdasági szereplő neve    Kontakt    Státusz    Portál felhasználó    Ajánlat nettó összege    Ajánlat bruttó összege    Pénznem    Benyújtás dátuma    Típus    Eljárás szakasz sorszáma    Eljárás szakasz    Keretmegállapodás azonosító 
     Sleep    2s
+
+##### Ajánlat sorok áttekintése gomb megnyomása
+Ajánlat sorok áttekintése gomb megnyomása
+    Wait Until Element Is Visible    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/BidLines"]    10s
+    Wait Until Element Is Enabled    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/BidLines"]    10s
+    Click Element    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/BidLines"]
+    Sleep    3s
+
+Ajánlat sorok áttekintése, Tételek táblázat validálása
+    Validate Table Headers    5    MEGNEVEZÉS    MENNYISÉG    EGYSÉG    TELJESÍTÉSI HATÁRIDŐ    EGYÉB INFORMÁCIÓ    MEGJEGYZÉSEK  
+    Sleep    1s   
+
+# Ajánlat sorok áttekintése, Ajánlati elemek összesítése táblázat validálása?????
+
+# Kilépés az Ajánlat sorok áttekintése ablakból az ESCAPE gombbal
+    Press Keys    xpath=//body    ESCAPE
+    Sleep    1s
+
+
+##### Ajánlat feltételek áttekintése gomb megnyomása
+Ajánlat feltételek áttekintése gomb megnyomása
+    Wait Until Element Is Visible    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/TermLines"]    10s
+    Wait Until Element Is Enabled    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/TermLines"]    10s
+    Click Element    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/TermLines"]
+    Sleep    2s
+
+# Ajánlat feltételek áttekintése táblázat
+    Validate Table Headers    5    FELTÉTEL TÍPUSA    ELŐÍRT SZEMPONT, FELTÉTEL  
+    Sleep    1s  
+
+# Ajánlati fetételek táblázat ban az első sor kiválasztása
+    Click Element    xpath=(//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventTermOverView/1//_activeTab"]//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[2]
+    Sleep    2s 
+         
+# Kilépés az Ajánlati feltételek áttekintése ablakból az ESCAPE gombbal
+    Press Keys    xpath=//body    ESCAPE
+    Sleep    1s
+
+
+##### Eljárás eredménye gomb megnyomása
+Eljárás eredménye gomb megnyomása
+    Wait Until Element Is Visible    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/SourcingEventResult"]    10s
+    Wait Until Element Is Enabled    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/SourcingEventResult"]    10s
+    Click Element    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/SourcingEventResult"]
+    Sleep    2s
+
+# Ajánlat feltételek áttekintése táblázat
+    Validate Table Headers    5    SORSZÁM    RÉSZAJÁNLATI KÖR NEVE    EREDMÉNY  
+    Sleep    1s  
+
+# Ajánlati fetételek táblázat ban az első sor kiválasztása
+    Click Element    xpath=(//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventTermOverView/1//_activeTab"]//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[2]
+    Sleep    2s 
+         
+# Kilépés az Ajánlati feltételek áttekintése ablakból az ESCAPE gombbal
+    Press Keys    xpath=//body    ESCAPE
+    Sleep    1s    
