@@ -114,7 +114,7 @@ Adminisztráció blokk elemzése
 
 # Kattintás az első oszlop index szerinti oszlopában lévő linkre
     Kattintás sor linkre    3
-    Sleep    7s
+    Sleep    8s
 
 
 Kapcsolódó igények menü kiválasztása
@@ -242,8 +242,8 @@ Dokumentumok validálása a táblázatban
 Kommunikáció menü kiválasztása
 ##### Kommunikáció
 # 1) Kattintás a "Dokumentumok" melletti három pontra
-    Wait Until Element Is Visible    xpath=//a[contains(text(),"Dokumentumok")]/following::a[@class="tab_menu_dropdown_link"][1]    10s
-    Click Element    xpath=//a[contains(text(),"Dokumentumok")]/following::a[@class="tab_menu_dropdown_link"][1]
+    Wait Until Element Is Visible    xpath=//a[contains(text(),"Ellenőrzés adatok")]/following::a[@class="tab_menu_dropdown_link"][1]    10s
+    Click Element    xpath=//a[contains(text(),"Ellenőrzés adatok")]/following::a[@class="tab_menu_dropdown_link"][1]
 
 # 2) Kattintás a legördülő menüben a "Kommunikáció" elemre (id alapján)
     Wait Until Element Is Visible    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_Communications_Tab"]    10s
@@ -255,20 +255,20 @@ Kommunikáció validálása a táblázatban
     Sleep    2s
 
 
-#Jóváhagyók menü kiválasztása
+Jóváhagyók menü kiválasztása
 ##### Jóváhagyók
-# 1) Kattintás a "Dokumentumok" melletti három pontra
-   # Wait Until Element Is Enabled    xpath=//a[contains(text(),"Dokumentumok")]/following::a[@class="tab_menu_dropdown_link"][1]    10s
-   # Click Element    xpath=//a[contains(text(),"Dokumentumok")]/following::a[@class="tab_menu_dropdown_link"][1]
+# 1) Kattintás a "Kommunikáció" melletti három pontra
+    Wait Until Element Is Enabled    xpath=//a[contains(text(),"Kommunikáció")]/following::a[@class="tab_menu_dropdown_link"][1]    10s
+    Click Element    xpath=//a[contains(text(),"Kommunikáció")]/following::a[@class="tab_menu_dropdown_link"][1]
 
 # 2) Kattintás a legördülő menüben a "Jóváhagyók" elemre (id alapján)
-  #  Wait Until Element Is Visible    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_Approver_Tab"]    10s
-   # Click Element    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_Approver_Tab"]
-   # Sleep    5s    
+    Wait Until Element Is Visible    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_Approver_Tab"]    10s
+    Click Element    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_Approver_Tab"]
+    Sleep    5s    
 
-#Jóváhagyók validálása a táblázatban
-    #Validate Table Headers    3    JÓVÁHAGYÓ    FELADAT NEVE    JÓVÁHAGYÓ SZEREPKÖRE    EREDMÉNY    FELADAT ELVÉGZÉSE 
-   # Sleep    2s
+Jóváhagyók validálása a táblázatban
+    Validate Table Headers    3    JÓVÁHAGYÓ    FELADAT NEVE    JÓVÁHAGYÓ SZEREPKÖRE    EREDMÉNY    FELADAT ELVÉGZÉSE 
+    Sleep    2s
 
 
 Ajánlatok táblázat validálása
@@ -300,7 +300,7 @@ Ajánlat feltételek áttekintése gomb megnyomása
     Click Element    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/TermLines"]
     Sleep    2s
 
-# Ajánlat feltételek áttekintése táblázat
+Ajánlat feltételek áttekintése táblázat validálása
     Validate Table Headers    5    FELTÉTEL TÍPUSA    ELŐÍRT SZEMPONT, FELTÉTEL  
     Sleep    1s  
 
@@ -320,14 +320,14 @@ Eljárás eredménye gomb megnyomása
     Click Element    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/SourcingEventResult"]
     Sleep    2s
 
-# Ajánlat feltételek áttekintése táblázat
+Eljárás eredmények táblázat validálása
     Validate Table Headers    5    SORSZÁM    RÉSZAJÁNLATI KÖR NEVE    EREDMÉNY  
     Sleep    1s  
 
-# Ajánlati fetételek táblázat ban az első sor kiválasztása
-    Click Element    xpath=(//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventTermOverView/1//_activeTab"]//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[2]
+# Eljárás eredménye táblázatban az első sor kiválasztása
+    #Click Element    xpath=(//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventTermOverView/1//_activeTab"]//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[2]
     Sleep    2s 
          
-# Kilépés az Ajánlati feltételek áttekintése ablakból az ESCAPE gombbal
+# Kilépés az Eljárás eredménye ablakból az ESCAPE gombbal
     Press Keys    xpath=//body    ESCAPE
     Sleep    1s    
