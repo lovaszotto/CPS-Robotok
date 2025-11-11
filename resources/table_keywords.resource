@@ -24,7 +24,7 @@ Validate Table Headers
     ${script}=    Catenate
     ...    var root=document.querySelectorAll('div.ag-root')[${adjusted_index}-1];
     ...    if(!root)return[];
-    ...    return Array.from(root.querySelectorAll('span.grid_header_text')).map(e=>e.textContent.trim());
+    ...    return Array.from(root.querySelectorAll('span.grid_header_text, span.grid_header_text_no_sort')).map(e => e.textContent.trim());
     ${actual_columns}=    Execute JavaScript    ${script}
 
     # Normalizálás (kisbetű, space trim)
