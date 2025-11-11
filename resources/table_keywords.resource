@@ -2,7 +2,7 @@
 Validate Table Headers
     [Arguments]    ${table_index}    @{expected_columns}
 
-    # Csökkentjük a table_index értékét eggyel (JS indexelés miatt)
+    # Csökkentjük a table_index értékét (JS indexelés miatt)
     ${adjusted_index}=    Evaluate    ${table_index}
     Log To Console    Vizsgált táblázat indexe (csökkentve): ${adjusted_index}
 
@@ -38,13 +38,19 @@ Validate Table Headers
     END
 
     Log To Console    Talált oszlopok (${adjusted_index}. tábla): ${normalized_columns}
-    Log To Console    Keresett oszlopok: ${expected_columns}
 
-    # Hiányzó oszlopok ellenőrzése
-    ${missing_columns}=    Create List
+    # Normalizáljuk a keresett oszlopokat is
+    ${normalized_expected}=    Create List
     FOR    ${col}    IN    @{expected_columns}
         ${col}=    Strip String    ${col}
         ${col}=    Convert To Lowercase    ${col}
+        Append To List    ${normalized_expected}    ${col}
+    END
+    Log To Console    Keresett oszlopok: ${normalized_expected}
+
+    # Hiányzó oszlopok ellenőrzése
+    ${missing_columns}=    Create List
+    FOR    ${col}    IN    @{normalized_expected}
         IF    '${col}' not in ${normalized_columns}
             Append To List    ${missing_columns}    ${col}
         END
