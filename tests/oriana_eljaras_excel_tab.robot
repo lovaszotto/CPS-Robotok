@@ -97,7 +97,7 @@ Kapcsolódó igények menü kiválasztása
 # 2) Kattintás a legördülő menüben a "Kapcsolódó igények" elemre (id alapján)
     Wait Until Element Is Visible    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_ConnectedRequisition_Tab"]    10s
     Click Element    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_ConnectedRequisition_Tab"]
-    Sleep    5s
+    Sleep    6s
 
 Kapcsolódó igények validálása
     Validate Table Headers    3    IGÉNY AZONOSÍTÓ    SZERVEZET    TERVSOR AZONOSÍTÓ    TERVEZETT BESZERZÉS
@@ -298,12 +298,16 @@ Eljárás eredménye gomb megnyomása
 
 Eljárás eredmények, részterületek táblázat validálása
     Validate Table Headers    5    SORSZÁM    RÉSZAJÁNLATI KÖR NEVE    EREDMÉNY  
-    Sleep    1s  
+    Sleep    3s  
 
 Eljárás eredménye táblázatban az első sor kiválasztása
     #Click Element    xpath=(//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventTermOverView/1//_activeTab"]//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[2]
-    Sleep    2s 
-         
+    Sleep    5s 
+
+Eljárás eredménye, Eredmény adatok táblázat validálása
+    Validate Table Headers    5    ELJÁRÁS SZAKASZ    ELJÁRÁS SZAKASZ SORSZÁMA    GAZDASÁGI SZEREPLŐ NEVE    BENYÚJTÁS DÁTUMA    VÉGLEGES AJÁNLAT?    ÉRVÉNYES AJÁNLATOT ADOTT?    NYERTES?    ELLENSZOLGÁLTATÁS ÖSSZEGE (NETTÓ FT)
+    Sleep    2s
+
     Kilépés az ablakból az ESCAPE gombbal  
 
 
@@ -312,4 +316,6 @@ Eljárás eredménye táblázatban az első sor kiválasztása
     Click Element    xpath=//li[contains(@class,"nav-item")]//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3//_tab_InterestedEconomicParty_Tab"]
     Sleep    5s
 
-    Validate Table Headers    4    GAZDASÁGI SZEREPLŐ NEVE    CÍM (ORSZÁG)    
+Érdeklődő gazdasági szereplők táblázat validálása
+    Validate Table Headers    4    GAZDASÁGI SZEREPLŐ NEVE    CÍM (ORSZÁG)  
+    Sleep    2s  
