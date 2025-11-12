@@ -1,5 +1,5 @@
 *** Variables ***
-${AZONOSITO}    00049
+${AZONOSITO}    00042
 
 *** Settings ***
 Library    SeleniumLibrary
@@ -87,7 +87,6 @@ Adminisztráció blokk elemzése
 Kattintás az első oszlop AZONOSITO szerinti linkre
     Kattintás erre az azonosító linkre    ${AZONOSITO}
     Sleep    12s
-
 
 Kapcsolódó igények menü kiválasztása
 ##### Kapcsolódó igények menü kiválasztása
@@ -242,8 +241,6 @@ Jóváhagyók validálása a táblázatban
     Validate Table Headers    3    JÓVÁHAGYÓ    FELADAT NEVE    JÓVÁHAGYÓ SZEREPKÖRE    EREDMÉNY    FELADAT ELVÉGZÉSE 
     Sleep    2s
 
-
-###### Ajánlatok menü kiválasztása
 Ajánlatok táblázat validálása
     Validate Table Headers    4    Gazdasági szereplő azonosító    Gazdasági szereplő neve    Státusz    Ajánlat nettó összege    Ajánlat bruttó összege    Pénznem    Benyújtás dátuma    Típus    Eljárás szakasz sorszáma    Eljárás szakasz    Keretmegállapodás / dbr azonosító
     Sleep    2s
@@ -257,9 +254,15 @@ Ajánlat sorok áttekintése gomb megnyomása
 
 Ajánlat sorok áttekintése, Tételek táblázat validálása
     Validate Table Headers    5    MEGNEVEZÉS    MENNYISÉG    EGYSÉG    TELJESÍTÉSI HATÁRIDŐ    EGYÉB INFORMÁCIÓ    MEGJEGYZÉSEK  
-    Sleep    1s   
+    Sleep    2s   
 
-# Ajánlat sorok áttekintése, Ajánlati elemek összesítése táblázat validálása?????
+Ajánlat sorok áttekintése, Tételek táblázatban az első sor kiválasztása
+    Click Element    xpath=(//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventBidLineOverView/1//_activeTab"]//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[2]
+    Sleep    2s 
+
+Ajánlat sorok áttekintése, Ajánlati elemek összesítése táblázat validálása
+    Validate Table Headers    6    GAZDASÁGI SZEREPLŐ AZONOSÍTÓJA    GAZDASÁGI SZEREPLŐ NEVE    RÉSZAJÁNLATI KÖR    ELJÁRÁS SZAKASZ SORSZÁMA    ELJÁRÁS SZAKASZ    BENYÚJTÁS DÁTUMA    BESZERZÉSI KATEGÓRIA SZÁMA, AZONOSÍTÓJA    MENNYISÉG    MÉRTÉKEGYSÉG    EGYSÉGÁR    NETTÓ ÖSSZEG    ÁFA (%)    BRUTTÓ ÖSSZEG   
+    Sleep    2s  
 
     Kilépés az ablakból az ESCAPE gombbal
 
@@ -273,7 +276,7 @@ Ajánlat feltételek áttekintése gomb megnyomása
 
 Ajánlat feltételek áttekintése táblázat validálása
     Validate Table Headers    5    FELTÉTEL TÍPUSA    ELŐÍRT SZEMPONT, FELTÉTEL  
-    Sleep    1s  
+    Sleep    2s  
 
 Ajánlati feltételek áttekintése táblázatban az első sor kiválasztása
     Click Element    xpath=(//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventTermOverView/1//_activeTab"]//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[2]
@@ -298,3 +301,11 @@ Eljárás eredménye táblázatban az első sor kiválasztása
     Sleep    2s 
          
     Kilépés az ablakból az ESCAPE gombbal  
+
+
+Érdeklődő gazdasági szereplők tab kiválasztása
+    Wait Until Element Is Visible    xpath=//li[contains(@class,"nav-item")]//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3//_tab_InterestedEconomicParty_Tab"]    10s
+    Click Element    xpath=//li[contains(@class,"nav-item")]//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3//_tab_InterestedEconomicParty_Tab"]
+    Sleep    10s
+
+    Validate Table Headers    3    GAZDASÁGI SZEREPLŐ NEVE    CÍM (ORSZÁG)    
