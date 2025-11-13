@@ -298,14 +298,14 @@ Eljárás eredménye gomb megnyomása
 
 Eljárás eredmények, részterületek táblázat validálása
     Validate Table Headers    5    SORSZÁM    RÉSZAJÁNLATI KÖR NEVE    EREDMÉNY  
-    Sleep    3s  
+    Sleep    5s  
 
-Eljárás eredménye táblázatban az első sor kiválasztása
-    #Click Element    xpath=(//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventTermOverView/1//_activeTab"]//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[2]
+Eljárás eredmények, részterületek táblázatban az első sor kiválasztása
+    Click Element    xpath=(//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventResult/1//_activeTab"]//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[1]
     Sleep    5s 
 
 Eljárás eredménye, Eredmény adatok táblázat validálása
-    Validate Table Headers    5    ELJÁRÁS SZAKASZ    ELJÁRÁS SZAKASZ SORSZÁMA    GAZDASÁGI SZEREPLŐ NEVE    BENYÚJTÁS DÁTUMA    VÉGLEGES AJÁNLAT?    ÉRVÉNYES AJÁNLATOT ADOTT?    NYERTES?    ELLENSZOLGÁLTATÁS ÖSSZEGE (NETTÓ FT)
+    Validate Table Headers    6    ELJÁRÁS SZAKASZ    ELJÁRÁS SZAKASZ SORSZÁMA    GAZDASÁGI SZEREPLŐ NEVE    BENYÚJTÁS DÁTUMA    VÉGLEGES AJÁNLAT?    ÉRVÉNYES AJÁNLATOT TETT?    NYERTES?    ELLENSZOLGÁLTATÁS ÖSSZEGE (NETTÓ FT)
     Sleep    2s
 
     Kilépés az ablakból az ESCAPE gombbal  
