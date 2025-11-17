@@ -59,6 +59,7 @@ Validate Table Headers
     IF    ${missing_columns}
         Log To Console    ⚠️ Hiányzó oszlop(ok): ${missing_columns}
         Log    ⚠️ Hiányzó oszlop(ok): ${missing_columns}
+        Fail    ❌ Hiányzó oszlop(ok): ${missing_columns}
     ELSE
         Log To Console    ✅ Minden oszlop megtalálható.
     END

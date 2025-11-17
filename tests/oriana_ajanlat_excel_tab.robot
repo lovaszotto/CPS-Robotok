@@ -20,7 +20,7 @@ Handle Modal Dialog
     Should Not Be Empty    ${text}    Az érték üres!
 
 *** Test Cases ***
-CPS30 ELJÁRÁS oldal megnyitása
+VBÜ Oriana ELJÁRÁS oldal megnyitása
     Bejelentkezés admin felhasználóval
 
 # Modal ablak kezelése ha van
