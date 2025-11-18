@@ -3,8 +3,8 @@ Library    SeleniumLibrary
 
 *** Variables ***
 ${URL}    https://vbr.orianasoftware.com/VBR-CPS
-${MS_EMAIL}    %{MS_EMAIL=zelina.attila@clarity.hu}
-${MS_PASSWORD}    %{MS_PASSWORD=PokMalac236}
+${MS_EMAIL}    %{MS_EMAIL=valami@clarity.hu}
+${MS_PASSWORD}    %{MS_PASSWORD=ide kell a jelszó}
 
 *** Keywords ***
 Bejelentkezés admin felhasználóval
