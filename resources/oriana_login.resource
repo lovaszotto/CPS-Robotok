@@ -3,8 +3,8 @@ Library    SeleniumLibrary
 
 *** Variables ***
 ${URL}    https://vbr.orianasoftware.com/VBR-CPS
-${MS_EMAIL}    %{MS_EMAIL=zelina.attila@clarity.hu}
-${MS_PASSWORD}    %{MS_PASSWORD=PokMalac236}
+${MS_EMAIL}    %{MS_EMAIL=valami@clarity.hu}
+${MS_PASSWORD}    %{MS_PASSWORD=ide kell a jelszó}
 
 *** Keywords ***
 Bejelentkezés admin felhasználóval
@@ -16,7 +16,7 @@ Bejelentkezés admin felhasználóval
     Maximize Browser Window
     Sleep    5s
     
-    # Várjuk meg, hogy betöltődjön az oldal - lehet Microsoft login vagy már bejelentkezve
+#Várjuk meg, hogy betöltődjön az oldal - lehet Microsoft login vagy már bejelentkezve
     ${page_loaded}=    Run Keyword And Return Status    Wait Until Page Contains    Microsoft    5s
     Run Keyword If    ${page_loaded}    Log To Console    Microsoft bejelentkezési oldal betöltődött
     Run Keyword If    ${page_loaded}    Handle Microsoft Login
@@ -67,7 +67,7 @@ Handle Microsoft Login
     Wait Until Element Is Visible    id=maintenance_messages    60s
 
 Handle CPS Login
-    Log To Console    CPS bejelentkezési folyamat...
+    Log To Console    VBÜ bejelentkezési folyamat...
     Click Element    id=username
     Sleep    0.5s
     Input Text    id=username    admin

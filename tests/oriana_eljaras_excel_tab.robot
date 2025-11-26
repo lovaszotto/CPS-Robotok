@@ -1,5 +1,5 @@
 *** Variables ***
-${AZONOSITO}    00049
+${AZONOSITO}    00042
 
 *** Settings ***
 Library    SeleniumLibrary
@@ -8,100 +8,10 @@ Library    Collections
 Resource    ../resources/oriana_login.resource
 Resource    ../resources/table_keywords.resource
 
-*** Keywords ***
-Érték szöveg és nem üres
-    [Arguments]    ${text}
-    Should Be True    '${text}' != ''    Az érték nem szöveg!
-    Should Not Be Empty    ${text}    Az érték üres!
-
-*** Keywords ***
-Handle Modal Dialog
-    # Modal ablak ellenőrzés és ESC megnyomása ha van
-    ${modal_present}=    Run Keyword And Return Status    Element Should Be Visible    css=.bootbox.modal
-    Run Keyword If    ${modal_present}    Press Keys    None    ESCAPE
-    Run Keyword If    ${modal_present}    Sleep    1s
-    Run Keyword If    ${modal_present}    Log    Modal ablak bezárva ESC-cel  
-
-*** Keywords ***
-Kattintás táblázat sorra azonosító alapján
-    [Arguments]    ${link_nev}
-    Log To Console    🔍 Keresett link neve: ${link_nev}
-
-    # Gyűjtsük ki az összes sor link szövegét az első oszlopból (SourcingEventCode)
-    ${links}=    Get WebElements    xpath=//div[contains(@class,"ag-body-container")]//div[contains(@class,"ag-row")]//div[@colid="SourcingEventCode"]//a
-
-    ${sor_index}=    Set Variable    0
-    ${i}=    Set Variable    1
-
-    # Végigmegyünk az összes linken
-    FOR    ${link}    IN    @{links}
-        ${text}=    Get Text    ${link}
-        ${text}=    Strip String    ${text}
-        Run Keyword And Continue On Failure    Log To Console    Ellenőrzött link (${i}): ${text}
-
-        ${match}=    Run Keyword And Return Status    Should Contain    ${text}    ${link_nev}
-        IF    ${match}
-            ${sor_index}=    Set Variable    ${i}
-            Exit For Loop
-        END
-        ${i}=    Evaluate    ${i} + 1
-    END
-
-    # Ha nem találtunk linket
-    IF    ${sor_index} == 0
-        Fail    ⚠️ Nem találtunk sor linket az azonosítóval: ${link_nev}
-    END
-
-    # Kattintás a JS-es működő sorszámos módszerrel
-    Wait Until Element Is Visible    xpath=(//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[${sor_index}]    5s
-    Execute JavaScript    document.evaluate('(//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[${sor_index}]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click();
-    Log To Console    ✅ Kattintás a(z) ${sor_index}. sorra sikeres.
-    Sleep    2s
-
-
-*** Keywords ***
-Kattintás erre az azonosító linkre
-    [Arguments]    ${link_nev}
-    Log To Console    🔍 Keresett link neve: ${link_nev}
-
-    # Gyűjtsük ki az összes linket az első oszlopból, ahol a colid = SourcingEventCode
-    ${links}=    Get WebElements    xpath=//div[contains(@class,"ag-body-container")]//div[contains(@class,"ag-row")]//div[@colid="SourcingEventCode"]//a
-
-    ${count}=    Get Length    ${links}
-    Log To Console    🔢 Összes link száma az első oszlopban: ${count}
-
-    ${found}=    Set Variable    0
-
-    # Végigmegyünk az összes linken
-    FOR    ${link}    IN    @{links}
-        ${text}=    Get Text    ${link}
-        ${text}=    Strip String    ${text}
-
-        Run Keyword And Continue On Failure    Log To Console    Ellenőrzött link: ${text}
-
-        # Ha a link szövege tartalmazza a keresett nevet → kattintás
-        ${match}=    Run Keyword And Return Status    Should Contain    ${text}    ${link_nev}
-        IF    ${match}
-            Scroll Element Into View    ${link}
-            Wait Until Element Is Visible    ${link}    5s
-            Click Element    ${link}
-            Log To Console    ✅ Kattintás a linkre: ${text}
-            Sleep    1s
-            ${found}=    Evaluate    ${found} + 1
-        END
-    END
-
-    # Összegzés
-    IF    ${found} > 0
-        Log To Console    🎯 Összesen ${found} egyező linkre kattintottunk.
-    ELSE
-        Log To Console    ⚠️ Nem találtunk egyező linket a "${link_nev}" kifejezéssel.
-    END
-
 
 *** Test Cases ***
 
-ELJÁRÁS oldal megnyitása
+Bejelentkezés admin felhasználóval
     Bejelentkezés admin felhasználóval
 
 Modal ablak kezelése ha van
@@ -117,10 +27,10 @@ Kiválasztjuk az "Eljárás" menüpontot
     Click Element    id=menu_mm_MM_CPS_Sourcing
     Sleep    1s
 
-Várjuk, hogy az ag-Grid fő táblázat megjelenjen
+Várjuk, hogy az fő táblázat megjelenjen
     Wait Until Page Contains Element    xpath=//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")]    30s
 
-Kattintás a paraméterben megadott sorra
+Kattintás a paraméterben megadott sorra azonosító alapján
     Kattintás táblázat sorra azonosító alapján    ${AZONOSITO}
     Sleep    5s
 
@@ -174,10 +84,9 @@ Adminisztráció blokk elemzése
     Érték szöveg és nem üres    ${text}
     Sleep    2s
 
-# Kattintás az első oszlop index szerinti oszlopában lévő linkre
+Kattintás az első oszlop AZONOSITO szerinti linkre
     Kattintás erre az azonosító linkre    ${AZONOSITO}
     Sleep    12s
-
 
 Kapcsolódó igények menü kiválasztása
 ##### Kapcsolódó igények menü kiválasztása
@@ -188,7 +97,7 @@ Kapcsolódó igények menü kiválasztása
 # 2) Kattintás a legördülő menüben a "Kapcsolódó igények" elemre (id alapján)
     Wait Until Element Is Visible    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_ConnectedRequisition_Tab"]    10s
     Click Element    xpath=//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/2//_tab_ConnectedRequisition_Tab"]
-    Sleep    5s
+    Sleep    6s
 
 Kapcsolódó igények validálása
     Validate Table Headers    3    IGÉNY AZONOSÍTÓ    SZERVEZET    TERVSOR AZONOSÍTÓ    TERVEZETT BESZERZÉS
@@ -332,7 +241,6 @@ Jóváhagyók validálása a táblázatban
     Validate Table Headers    3    JÓVÁHAGYÓ    FELADAT NEVE    JÓVÁHAGYÓ SZEREPKÖRE    EREDMÉNY    FELADAT ELVÉGZÉSE 
     Sleep    2s
 
-
 Ajánlatok táblázat validálása
     Validate Table Headers    4    Gazdasági szereplő azonosító    Gazdasági szereplő neve    Státusz    Ajánlat nettó összege    Ajánlat bruttó összege    Pénznem    Benyújtás dátuma    Típus    Eljárás szakasz sorszáma    Eljárás szakasz    Keretmegállapodás / dbr azonosító
     Sleep    2s
@@ -346,13 +254,17 @@ Ajánlat sorok áttekintése gomb megnyomása
 
 Ajánlat sorok áttekintése, Tételek táblázat validálása
     Validate Table Headers    5    MEGNEVEZÉS    MENNYISÉG    EGYSÉG    TELJESÍTÉSI HATÁRIDŐ    EGYÉB INFORMÁCIÓ    MEGJEGYZÉSEK  
-    Sleep    1s   
+    Sleep    2s   
 
-# Ajánlat sorok áttekintése, Ajánlati elemek összesítése táblázat validálása?????
+Ajánlat sorok áttekintése, Tételek táblázatban az első sor kiválasztása
+    Click Element    xpath=(//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventBidLineOverView/1//_activeTab"]//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[2]
+    Sleep    2s 
 
-# Kilépés az Ajánlat sorok áttekintése ablakból az ESCAPE gombbal
-    Press Keys    xpath=//body    ESCAPE
-    Sleep    1s
+Ajánlat sorok áttekintése, Ajánlati elemek összesítése táblázat validálása
+    Validate Table Headers    6    GAZDASÁGI SZEREPLŐ AZONOSÍTÓJA    GAZDASÁGI SZEREPLŐ NEVE    RÉSZAJÁNLATI KÖR    ELJÁRÁS SZAKASZ SORSZÁMA    ELJÁRÁS SZAKASZ    BENYÚJTÁS DÁTUMA    BESZERZÉSI KATEGÓRIA SZÁMA, AZONOSÍTÓJA    MEGNEVEZÉS    MENNYISÉG    MÉRTÉKEGYSÉG    EGYSÉGÁR    NETTÓ ÖSSZEG    ÁFA (%)    BRUTTÓ ÖSSZEG   
+    Sleep    2s  
+
+    Kilépés az ablakból az ESCAPE gombbal
 
 
 ##### Ajánlat feltételek áttekintése gomb megnyomása
@@ -360,19 +272,21 @@ Ajánlat feltételek áttekintése gomb megnyomása
     Wait Until Element Is Visible    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/TermLines"]    10s
     Wait Until Element Is Enabled    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/TermLines"]    10s
     Click Element    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/TermLines"]
-    Sleep    2s
+    Sleep    4s
 
 Ajánlat feltételek áttekintése táblázat validálása
     Validate Table Headers    5    FELTÉTEL TÍPUSA    ELŐÍRT SZEMPONT, FELTÉTEL  
-    Sleep    1s  
+    Sleep    2s  
 
-# Ajánlati fetételek táblázat ban az első sor kiválasztása
+Ajánlati feltételek áttekintése táblázatban az első sor kiválasztása
     Click Element    xpath=(//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventTermOverView/1//_activeTab"]//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[2]
-    Sleep    2s 
-         
-# Kilépés az Ajánlati feltételek áttekintése ablakból az ESCAPE gombbal
-    Press Keys    xpath=//body    ESCAPE
-    Sleep    1s
+    Sleep    3s 
+
+Ajánlat feltételek áttekintése, Válaszok táblázat validálása
+    Validate Table Headers    6    GAZDASÁGI SZEREPLŐ AZONOSÍTÓJA    GAZDASÁGI SZEREPLŐ NEVE    ELJÁRÁS SZAKASZ SORSZÁMA    ELJÁRÁS SZAKASZ    BENYÚJTÁS DÁTUMA    VÁLASZ    MEGJEGYZÉS  
+    Sleep    2s  
+
+    Kilépés az ablakból az ESCAPE gombbal
 
 
 ##### Eljárás eredménye gomb megnyomása
@@ -382,14 +296,26 @@ Eljárás eredménye gomb megnyomása
     Click Element    xpath=//button[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3/SourcingEventBid_Tab/SourcingEventResult"]
     Sleep    2s
 
-Eljárás eredmények táblázat validálása
+Eljárás eredmények, részterületek táblázat validálása
     Validate Table Headers    5    SORSZÁM    RÉSZAJÁNLATI KÖR NEVE    EREDMÉNY  
-    Sleep    1s  
+    Sleep    5s  
 
-# Eljárás eredménye táblázatban az első sor kiválasztása
-    #Click Element    xpath=(//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventTermOverView/1//_activeTab"]//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[2]
-    Sleep    2s 
-         
-# Kilépés az Eljárás eredménye ablakból az ESCAPE gombbal
-    Press Keys    xpath=//body    ESCAPE
-    Sleep    1s    
+Eljárás eredmények, részterületek táblázatban az első sor kiválasztása
+    Click Element    xpath=(//div[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit@Screen_CPS_SourcingEventResult/1//_activeTab"]//div[contains(@class,"ag-body-container")]/div[contains(@class,"ag-row")])[1]
+    Sleep    5s 
+
+Eljárás eredménye, Eredmény adatok táblázat validálása
+    Validate Table Headers    6    ELJÁRÁS SZAKASZ    ELJÁRÁS SZAKASZ SORSZÁMA    GAZDASÁGI SZEREPLŐ NEVE    BENYÚJTÁS DÁTUMA    VÉGLEGES AJÁNLAT?    ÉRVÉNYES AJÁNLATOT TETT?    NYERTES?    ELLENSZOLGÁLTATÁS ÖSSZEGE (NETTÓ FT)
+    Sleep    2s
+
+    Kilépés az ablakból az ESCAPE gombbal  
+
+
+Érdeklődő gazdasági szereplők tab kiválasztása
+    Wait Until Element Is Visible    xpath=//li[contains(@class,"nav-item")]//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3//_tab_InterestedEconomicParty_Tab"]    10s
+    Click Element    xpath=//li[contains(@class,"nav-item")]//a[@id="Screen_CPS_SourcingEvent@Screen_CPS_SourcingEventEdit/3//_tab_InterestedEconomicParty_Tab"]
+    Sleep    5s
+
+Érdeklődő gazdasági szereplők táblázat validálása
+    Validate Table Headers    4    GAZDASÁGI SZEREPLŐ NEVE    CÍM (ORSZÁG)  
+    Sleep    2s  
